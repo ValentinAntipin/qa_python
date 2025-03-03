@@ -53,7 +53,24 @@ class TestBooksCollector:
         # проверяем, что жанр книги установлен корректно
         assert collector.get_book_genre('Гордость и предубеждение и зомби') == 'Фантастика'
 
-    # 4 тестируем, что книги с возрастным рейтингом не попадают в список книг для детей
+    # 4 тестируем получение жанра для книги
+    def test_get_book_genre(self, collector):
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Фантастика')
+
+        # проверяем, что возвращаемый жанр соответствует ожиданиям
+        assert collector.get_book_genre('Гордость и предубеждение и зомби') == 'Фантастика'
+
+    # 5 тестируем получение всех жанров книг
+    def test_get_books_genre(self, collector):
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Фантастика')
+
+        # проверяем, что метод get_books_genre возвращает правильный словарь
+        books_genre = collector.get_books_genre()
+        assert books_genre == {'Гордость и предубеждение и зомби': 'Фантастика'}
+
+    # 6 тестируем, что книги с возрастным рейтингом не попадают в список книг для детей
     def test_get_books_for_children(self,collector):
 
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -66,7 +83,7 @@ class TestBooksCollector:
         assert 'Гордость и предубеждение и зомби' in books_for_children
         assert 'Стивен Кинг: Оно' not in books_for_children
 
-    # 5 тестируем получение списка книг с определённым жанром
+    # 7 тестируем получение списка книг с определённым жанром
     def test_get_books_with_specific_genre(self,collector):
 
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -81,7 +98,7 @@ class TestBooksCollector:
         assert len(books) == 1
         assert 'Гордость и предубеждение и зомби' in books
 
-    # 6 тестируем добавление несуществующей книги в избранное
+    # 8 тестируем добавление несуществующей книги в избранное
     def test_add_non_existent_book_to_favorites(self,collector):
 
         collector.add_book_in_favorites('Не существующая книга')
@@ -89,7 +106,7 @@ class TestBooksCollector:
         # проверяем, что список избранных остается пустым
         assert len(collector.get_list_of_favorites_books()) == 0
 
-    # 7 тестируем удаление книги из избранного
+    # 9 тестируем удаление книги из избранного
     def test_delete_book_from_favorites(self,collector):
 
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -99,13 +116,21 @@ class TestBooksCollector:
         # проверяем, что книга удалена из избранного
         assert 'Гордость и предубеждение и зомби' not in collector.get_list_of_favorites_books()
 
-    # 8 тестируем работу с пустым списком избранных книг
+    # 10 тестируем работу с пустым списком избранных книг
     def test_empty_favorites(self,collector):
 
         # проверяем, что список избранных книг пуст
         assert collector.get_list_of_favorites_books() == []
 
-    # 9 тестируем параметризацию установки жанра для нескольких книг
+    # 11 тестируем получение списка избранных книг
+    def test_get_list_of_favorites_books(self, collector):
+         collector.add_new_book('Гордость и предубеждение и зомби')
+         collector.add_book_in_favorites('Гордость и предубеждение и зомби')
+
+         # проверяем, что список избранных книг содержит добавленную книгу
+         assert 'Гордость и предубеждение и зомби' in collector.get_list_of_favorites_books()
+
+    # 12 тестируем параметризацию установки жанра для нескольких книг
     @pytest.mark.parametrize("name, genre, expected_genre", [
         ("Гордость и предубеждение и зомби", "Фантастика", "Фантастика"),
         ("Что делать, если ваш кот хочет вас убить", "Ужасы", "Ужасы"),
