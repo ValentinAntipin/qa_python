@@ -106,7 +106,31 @@ class TestBooksCollector:
         # проверяем, что список избранных остается пустым
         assert len(collector.get_list_of_favorites_books()) == 0
 
-    # 9 тестируем удаление книги из избранного
+    # 9 позитивный тест: добавление существующей книги в избранное
+    def test_add_existing_book_to_favorites(self, collector):
+        # добавляем книгу
+        collector.add_new_book('Гордость и предубеждение и зомби')
+
+        # добавляем книгу в избранное
+        collector.add_book_in_favorites('Гордость и предубеждение и зомби')
+
+        # проверяем, что книга добавлена в избранное
+        assert 'Гордость и предубеждение и зомби' in collector.get_list_of_favorites_books()
+
+    # 10 еще один тест для добавления в избранное
+    def test_add_book_in_favorites_multiple_times(self, collector):
+        # добавляем книгу
+        collector.add_new_book('Гордость и предубеждение и зомби')
+
+        # добавляем книгу в избранное дважды
+        collector.add_book_in_favorites('Гордость и предубеждение и зомби')
+        collector.add_book_in_favorites('Гордость и предубеждение и зомби')
+
+        # проверяем, что книга добавлена в избранное только один раз (не должно быть дубликатов)
+        assert len(collector.get_list_of_favorites_books()) == 1
+        assert 'Гордость и предубеждение и зомби' in collector.get_list_of_favorites_books()
+
+    # 12 тестируем удаление книги из избранного
     def test_delete_book_from_favorites(self,collector):
 
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -116,13 +140,13 @@ class TestBooksCollector:
         # проверяем, что книга удалена из избранного
         assert 'Гордость и предубеждение и зомби' not in collector.get_list_of_favorites_books()
 
-    # 10 тестируем работу с пустым списком избранных книг
+    # 13 тестируем работу с пустым списком избранных книг
     def test_empty_favorites(self,collector):
 
         # проверяем, что список избранных книг пуст
         assert collector.get_list_of_favorites_books() == []
 
-    # 11 тестируем получение списка избранных книг
+    # 14 тестируем получение списка избранных книг
     def test_get_list_of_favorites_books(self, collector):
          collector.add_new_book('Гордость и предубеждение и зомби')
          collector.add_book_in_favorites('Гордость и предубеждение и зомби')
@@ -130,7 +154,7 @@ class TestBooksCollector:
          # проверяем, что список избранных книг содержит добавленную книгу
          assert 'Гордость и предубеждение и зомби' in collector.get_list_of_favorites_books()
 
-    # 12 тестируем параметризацию установки жанра для нескольких книг
+    # 15 тестируем параметризацию установки жанра для нескольких книг
     @pytest.mark.parametrize("name, genre, expected_genre", [
         ("Гордость и предубеждение и зомби", "Фантастика", "Фантастика"),
         ("Что делать, если ваш кот хочет вас убить", "Ужасы", "Ужасы"),
